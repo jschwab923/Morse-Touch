@@ -13,7 +13,9 @@
 @import AVFoundation;
 
 @interface NAYTorchFlasher ()
+
 @property (nonatomic) AVCaptureDevice *cameraDevice;
+
 @end
 
 @implementation NAYTorchFlasher
@@ -36,6 +38,7 @@
             NSDictionary *morseSymbolsDictionary = [NSString dictionaryOfMorseSymbols];
             NSString *currentLetter = [[morseSymbolsDictionary allKeysForObject:symbol] firstObject];
             [viewController.translationLabel setText:currentLetter];
+            [viewController.symbolLabel setText:symbol];
         }];
         
         for (int i = 0; i < symbol.length; i++) {
@@ -54,6 +57,7 @@
         [self.cameraDevice unlockForConfiguration];
         usleep(DELAY_WORD);
     }
+    
 }
 
 @end

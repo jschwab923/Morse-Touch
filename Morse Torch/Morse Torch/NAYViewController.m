@@ -35,7 +35,7 @@
     self.messageTextField.delegate = self;
     
     [self.translateButton setEnabled:NO];
-    [self.translateButton setAlpha:.3];
+    [self.translateButton setAlpha:.5];
     [self.translateButton.titleLabel sizeToFit];
     
     _backGroundQueue = [[NSOperationQueue alloc] init];
@@ -76,7 +76,7 @@
         [self startFlashesWithSymbols:morseSymbols];
     } else {
         [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
-        [self.translateButton setAlpha:.3];
+        [self.translateButton setAlpha:.5];
         [self.translateButton setEnabled:NO];
         self.translationLabel.text = @"";
     }

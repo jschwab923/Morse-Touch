@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B1460BF188F3973004EA88E /* Sidearrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6B1460BE188F3973004EA88E /* Sidearrow.jpg */; };
 		6B647A8A188DF07A00DFDC48 /* NAYTorchFlasher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B647A89188DF07A00DFDC48 /* NAYTorchFlasher.m */; };
 		6BE01E7B188DC747005C7240 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE01E7A188DC747005C7240 /* Foundation.framework */; };
 		6BE01E7D188DC747005C7240 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE01E7C188DC747005C7240 /* CoreGraphics.framework */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6B1460BE188F3973004EA88E /* Sidearrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sidearrow.jpg; sourceTree = "<group>"; };
 		6B3F5A15188DF17700E05CF6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6B3F5A17188DF84900E05CF6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		6B647A88188DF07A00DFDC48 /* NAYTorchFlasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAYTorchFlasher.h; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		6BE01E81188DC747005C7240 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6B1460BE188F3973004EA88E /* Sidearrow.jpg */,
 				6B3F5A17188DF84900E05CF6 /* Constants.h */,
 				6BE01EAF188DC787005C7240 /* arrow_up_unselected.png */,
 				6BE01E82188DC747005C7240 /* Morse Torch-Info.plist */,
@@ -254,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1460BF188F3973004EA88E /* Sidearrow.jpg in Resources */,
 				6BE01EB0188DC787005C7240 /* arrow_up_unselected.png in Resources */,
 				6BE01E93188DC747005C7240 /* Images.xcassets in Resources */,
 				6BE01E85188DC747005C7240 /* InfoPlist.strings in Resources */,
