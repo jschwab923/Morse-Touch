@@ -10,4 +10,6 @@
 
 @interface NAYViewController : UIViewController <UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *translationLabel;
+
 @end
