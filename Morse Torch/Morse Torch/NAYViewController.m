@@ -12,7 +12,7 @@
 
 @import AVFoundation;
 
-@interface NAYViewController ()
+@interface NAYViewController () <NAYTorchFlasherDelegate>
 {
     NSOperationQueue *_backGroundQueue;
 }
@@ -41,6 +41,7 @@
     _backGroundQueue = [[NSOperationQueue alloc] init];
     [_backGroundQueue setMaxConcurrentOperationCount:1];
     self.flasher = [[NAYTorchFlasher alloc] init];
+    self.flasher.delegate = self;
     
     // Set up observer for activating and deactiviating button with text field
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -52,9 +53,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-
 }
-
 
 - (IBAction)translateButtonPressed:(id)sender
 {
@@ -67,18 +66,20 @@
         if (messageToTranslate) {
             morseSymbols = [NSString arrayOfMorseSymbolsFromString:messageToTranslate];
         }
-        
-        self.messageTextField.text = @"";
-        [self.messageTextField endEditing:YES];
-        
-        [self.translateButton setTitle:@"Cancel Message" forState:UIControlStateNormal];
-
-        [self startFlashesWithSymbols:morseSymbols];
+        if (morseSymbols) {
+            self.messageTextField.text = @"";
+            [self.messageTextField endEditing:YES];
+            
+            [self.translateButton setTitle:@"Cancel Message" forState:UIControlStateNormal];
+            
+            [self startFlashesWithSymbols:morseSymbols];
+        }
     } else {
         [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
         [self.translateButton setAlpha:.5];
         [self.translateButton setEnabled:NO];
-        self.translationLabel.text = @"";
+        self.letterLabel.text = @"";
+        self.symbolLabel.text = @"";
     }
 }
 
@@ -91,6 +92,26 @@
         }];
     }
 }
+
+#pragma mark NAYTorchFlasherDelegate Methods
+- (void)flashingSymbol:(NSString *)symbol
+{
+    
+    NSDictionary *morseSymbolsDictionary = [NSString dictionaryOfMorseSymbols];
+    NSString *currentLetter = [[morseSymbolsDictionary allKeysForObject:symbol] firstObject];
+    [self.letterLabel setText:currentLetter];
+    [self.symbolLabel setText:symbol];
+    
+}
+
+- (void)flashingLastSymbol
+{
+    [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
+    [self.translateButton setEnabled:NO];
+    self.letterLabel.text = @"";
+    self.symbolLabel.text = @"";
+}
+
 #pragma mark - UITextFieldDelegate Methods
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

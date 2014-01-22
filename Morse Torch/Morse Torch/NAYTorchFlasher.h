@@ -9,7 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "NAYViewController.h"
 
+@protocol NAYTorchFlasherDelegate <NSObject>
+
+@required
+- (void)flashingSymbol:(NSString *)symbol;
+- (void)flashingLastSymbol;
+
+@end
+
+
 @interface NAYTorchFlasher : NSObject
+
+@property (nonatomic, assign) id <NAYTorchFlasherDelegate> delegate;
 
 - (void)flashMorseSymbol:(NSString *)symbol withViewController:(NAYViewController *)viewController;
 

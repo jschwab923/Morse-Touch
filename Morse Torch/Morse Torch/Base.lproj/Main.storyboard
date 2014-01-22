@@ -60,10 +60,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Morse Torch" id="P15-Rz-d48"/>
                     <connections>
+                        <outlet property="letterLabel" destination="btW-yZ-Tz9" id="JpM-bn-Qih"/>
                         <outlet property="messageTextField" destination="SNU-QE-BEt" id="Nxa-u4-Rlv"/>
                         <outlet property="symbolLabel" destination="jMA-Y0-MW7" id="PHP-5n-AYH"/>
                         <outlet property="translateButton" destination="7A3-Pz-apA" id="lNp-Bw-2ek"/>
-                        <outlet property="translationLabel" destination="btW-yZ-Tz9" id="Zuu-2z-als"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

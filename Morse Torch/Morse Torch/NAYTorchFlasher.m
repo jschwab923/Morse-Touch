@@ -6,11 +6,10 @@
 //  Copyright (c) 2014 Jeff Schwab. All rights reserved.
 //
 
+@import AVFoundation;
 #import "NAYTorchFlasher.h"
 #import "NAYViewController.h"
 #import "NSString+MorseCode.h"
-
-@import AVFoundation;
 
 @interface NAYTorchFlasher ()
 
@@ -33,12 +32,8 @@
     if (self.cameraDevice) {
         [self.cameraDevice lockForConfiguration:nil];
         
-        // Update main ui
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSDictionary *morseSymbolsDictionary = [NSString dictionaryOfMorseSymbols];
-            NSString *currentLetter = [[morseSymbolsDictionary allKeysForObject:symbol] firstObject];
-            [viewController.translationLabel setText:currentLetter];
-            [viewController.symbolLabel setText:symbol];
+            [self.delegate flashingSymbol:symbol];
         }];
         
         for (int i = 0; i < symbol.length; i++) {
@@ -56,8 +51,13 @@
         }
         [self.cameraDevice unlockForConfiguration];
         usleep(DELAY_WORD);
+        
+        if ([[[NSOperationQueue currentQueue] operations] count] <= 1) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.delegate flashingLastSymbol];
+            }];
+        }
     }
-    
 }
 
 @end
