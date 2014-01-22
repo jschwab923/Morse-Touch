@@ -17,16 +17,20 @@
     for (NSInteger i = 0; i < string.length; i++) {
         NSString *currentCharacter = [string substringWithRange:NSMakeRange(i, 1)];
         currentCharacter = [currentCharacter uppercaseString];
-        if (![[NSString dictionaryOfMorseSymbols] objectForKey:currentCharacter]) {
+        
+        if ([currentCharacter isEqualToString:@" "]) {
+            currentCharacter = @"";
+        } else if (![[NSString dictionaryOfMorseSymbols] objectForKey:currentCharacter]) {
             UIAlertView *invalidStringAlert = [[UIAlertView alloc] initWithTitle:@"Invalid Characters"
                                                                          message:@"Message contains invalid characters. Only A-Z and 0-9 allowed"
                                                                         delegate:nil
                                                                cancelButtonTitle:@"Ok" otherButtonTitles: nil];
             [invalidStringAlert show];
             return nil;
+        } else {
+            NSString *morseSymbol = [NSString morseSymbolFromCharacter:currentCharacter];
+            [arrayOfSymbols addObject:morseSymbol];
         }
-        NSString *morseSymbol = [NSString morseSymbolFromCharacter:currentCharacter];
-        [arrayOfSymbols addObject:morseSymbol];
     }
     return arrayOfSymbols;
 }
