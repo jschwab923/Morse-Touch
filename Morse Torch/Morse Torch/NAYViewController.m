@@ -10,7 +10,7 @@
 #import "NSString+MorseCode.h"
 #import "NAYTorchFlasher.h"
 #import <M13ProgressSuite/M13ProgressViewBar.h>
-
+#import "CFMagicEvents.h"
 
 @import AVFoundation;
 
@@ -19,17 +19,21 @@
     NSOperationQueue *_backGroundQueue;
     CGFloat _sendProgress;
     CGFloat _totalMessageLength;
+    
+    NSInteger flashOnCount;
+    NSInteger flashOffCount;
 }
-@end
-
-@interface NAYViewController ()
-
-@property (nonatomic) M13ProgressViewBar *progressBar;
 
 @property (weak, nonatomic) IBOutlet UIButton *translateButton;
 @property (weak, nonatomic) IBOutlet UITextField *messageTextField;
+@property (weak, nonatomic) IBOutlet UIButton *recieveMessageButton;
+@property (nonatomic) M13ProgressViewBar *progressBar;
 
 @property (nonatomic) NAYTorchFlasher *flasher;
+@property (nonatomic) CFMagicEvents *flashReciever;
+
+@property (nonatomic) NSString *currentWord;
+@property (nonatomic) NSDictionary *morseDictionary;
 
 @end
 
@@ -40,17 +44,23 @@
     [super viewDidLoad];
     self.messageTextField.delegate = self;
     
+    self.currentWord = [NSString new];
+    self.morseDictionary = [NSString dictionaryOfMorseSymbols];
+    
     [self.translateButton setEnabled:NO];
     [self.translateButton setAlpha:.5];
     [self.translateButton.titleLabel sizeToFit];
     
+    [self.recieveMessageButton setAlpha:.5];
+    
     _backGroundQueue = [[NSOperationQueue alloc] init];
     [_backGroundQueue setMaxConcurrentOperationCount:1];
     
+    // Set up objects for sending and recieving
     self.flasher = [[NAYTorchFlasher alloc] init];
     self.flasher.delegate = self;
-
-// TODO: TESTING PROGRESS BAR
+    
+    // Set up progress bar
     self.progressBar = [[M13ProgressViewBar alloc] initWithFrame:CGRectMake(0, 0, 250, 50)];
     self.progressBar.center = CGPointMake(CGRectGetMidX(self.view.frame), CGRectGetHeight(self.view.frame)-50);
     [self.progressBar setHidden:YES];
@@ -62,8 +72,14 @@
     // Set up observer for activating and deactiviating button with text field
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(textFieldChanged:)
-                                                 name:UITextFieldTextDidChangeNotification
-                                               object:nil];
+                                                 name:UITextFieldTextDidChangeNotification object:nil];
+    // Set up flash receiver notification obserevers and counters
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(flashEventReceived:) name:@"onMagicEventDetected" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(flashEventNotReceived:) name:@"onMagicEventNotDetected" object:nil];
+    flashOffCount = 0;
+    flashOnCount = 0;
 }
 
 - (void)dealloc
@@ -76,11 +92,36 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - IBAction Methods
+- (IBAction)receiveButtonPushed:(id)sender
+{
+    // Recieve message only if not already recieving
+    if ([[self.recieveMessageButton titleLabel].text isEqualToString:@"Recieve Message"]) {
+        // Only recieve message if text field is empty
+        if ([self.messageTextField.text isEqualToString:@""]) {
+            [self.translateButton setEnabled:NO];
+            [self.translateButton setAlpha:.5];
+            
+            [self.recieveMessageButton.titleLabel setText:@"Cancel Recieve"];
+            [self.recieveMessageButton setAlpha:1];
+            
+            self.flashReciever = [[CFMagicEvents alloc] init];
+            [self.flashReciever startCapture];
+        }
+    } else { //Cancel message
+        [self.recieveMessageButton.titleLabel setText:@"Recieve Message"];
+    }
+}
+
 - (IBAction)translateButtonPressed:(id)sender
 {
     [_backGroundQueue cancelAllOperations];
     
+    // Only send a message if the text field is not empty
     if (![self.messageTextField.text isEqualToString:@""]) {
+        [self.recieveMessageButton setEnabled:NO];
+        [self.recieveMessageButton setAlpha:.5];
+        
         NSString *messageToTranslate = self.messageTextField.text;
         
         NSArray *morseSymbols;
@@ -105,6 +146,9 @@
         [self.progressBar setProgress:0 animated:YES];
         [self.progressBar setHidden:YES];
         _sendProgress = 0;
+        
+        [self.recieveMessageButton setAlpha:1];
+        [self.recieveMessageButton setEnabled:YES];
     }
 }
 
@@ -136,11 +180,15 @@
 {
     [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
     [self.translateButton setEnabled:NO];
+    [self.translateButton setAlpha:.5];
     self.letterLabel.text = @"";
     self.symbolLabel.text = @"";
     _sendProgress = 0;
     [self.progressBar setProgress:0 animated:YES];
     [self.progressBar setHidden:YES];
+    
+    [self.recieveMessageButton setAlpha:1];
+    [self.recieveMessageButton setEnabled:YES];
 }
 
 #pragma mark - UITextFieldDelegate Methods
@@ -163,5 +211,34 @@
         [self.translateButton setEnabled:NO];
     }
 }
+
+- (void)flashEventReceived:(id)sender
+{
+    flashOffCount = 0;
+    flashOnCount++;
+}
+
+- (void)flashEventNotReceived:(id)sender
+{
+    if (flashOnCount >= 2) {
+        self.currentWord = [self.currentWord stringByAppendingString:@"-"];
+    } else if (flashOnCount > 0) {
+        self.currentWord = [self.currentWord stringByAppendingString:@"."];
+    }
+    
+    if (flashOffCount >= 5) {
+        [self.flashReciever stopCapture];
+    } else if (flashOffCount >= 2) {
+        NSString *recievedLetter = [[self.morseDictionary allKeysForObject:self.currentWord] firstObject];;
+        self.messageTextField.text = [self.messageTextField.text stringByAppendingString:
+                                      [NSString stringWithFormat:@" %@", recievedLetter]];
+        self.currentWord = @"";
+    }
+    
+    flashOnCount = 0;
+    flashOffCount++;
+}
+
+
 
 @end
