@@ -26,11 +26,11 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *translateButton;
 @property (weak, nonatomic) IBOutlet UITextField *messageTextField;
-@property (weak, nonatomic) IBOutlet UIButton *recieveMessageButton;
+@property (weak, nonatomic) IBOutlet UIButton *receiveMessageButton;
 @property (nonatomic) M13ProgressViewBar *progressBar;
 
 @property (nonatomic) NAYTorchFlasher *flasher;
-@property (nonatomic) CFMagicEvents *flashReciever;
+@property (nonatomic) CFMagicEvents *flashreceiver;
 
 @property (nonatomic) NSString *currentWord;
 @property (nonatomic) NSDictionary *morseDictionary;
@@ -91,19 +91,19 @@
 #pragma mark - IBAction Methods
 - (IBAction)receiveButtonPushed:(id)sender
 {
-    // Recieve message only if not already recieving
-    if ([[self.recieveMessageButton titleLabel].text isEqualToString:@"Recieve Message"]) {
-        // Only recieve message if text field is empty
+    // receive message only if not already recieving
+    if ([[self.receiveMessageButton titleLabel].text isEqualToString:@"Receive Message"]) {
+        // Only receive message if text field is empty
         if ([self.messageTextField.text isEqualToString:@""]) {
             [self disableButton:self.translateButton];
             
-            [self.recieveMessageButton.titleLabel setText:@"Cancel Recieve"];
+            [self.receiveMessageButton.titleLabel setText:@"Cancel Receive"];
             
-            self.flashReciever = [[CFMagicEvents alloc] init];
-            [self.flashReciever startCapture];
+            self.flashreceiver = [[CFMagicEvents alloc] init];
+            [self.flashreceiver startCapture];
         }
     } else { //Cancel message
-        [self.recieveMessageButton.titleLabel setText:@"Recieve Message"];
+        [self.receiveMessageButton.titleLabel setText:@"Receive Message"];
     }
 }
 
@@ -113,7 +113,7 @@
     
     // Only send a message if the text field is not empty
     if (![self.messageTextField.text isEqualToString:@""]) {
-        [self disableButton:self.recieveMessageButton];
+        [self disableButton:self.receiveMessageButton];
         
         NSString *messageToTranslate = self.messageTextField.text;
         
@@ -133,7 +133,7 @@
     } else {
         [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
         [self disableButton:self.translateButton];
-        [self enableButton:self.recieveMessageButton];
+        [self enableButton:self.receiveMessageButton];
         
         self.letterLabel.text = @"";
         self.symbolLabel.text = @"";
@@ -173,7 +173,7 @@
 {
     [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
     [self disableButton:self.translateButton];
-    [self enableButton:self.recieveMessageButton];
+    [self enableButton:self.receiveMessageButton];
     
     [self.progressBar setProgress:0 animated:YES];
     [self.progressBar setHidden:YES];
@@ -199,7 +199,7 @@
         [self enableButton:self.translateButton];
     } else {
         [self disableButton:self.translateButton];
-        [self disableButton:self.recieveMessageButton];
+        [self disableButton:self.receiveMessageButton];
     }
 }
 
@@ -218,11 +218,11 @@
     }
     
     if (flashOffCount >= 5) {
-        [self.flashReciever stopCapture];
+        [self.flashreceiver stopCapture];
     } else if (flashOffCount >= 2) {
-        NSString *recievedLetter = [[self.morseDictionary allKeysForObject:self.currentWord] firstObject];;
+        NSString *receivedLetter = [[self.morseDictionary allKeysForObject:self.currentWord] firstObject];;
         self.messageTextField.text = [self.messageTextField.text stringByAppendingString:
-                                      [NSString stringWithFormat:@" %@", recievedLetter]];
+                                      [NSString stringWithFormat:@" %@", receivedLetter]];
         self.currentWord = @"";
     }
     
