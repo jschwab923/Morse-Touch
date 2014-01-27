@@ -47,11 +47,7 @@
     self.currentWord = [NSString new];
     self.morseDictionary = [NSString dictionaryOfMorseSymbols];
     
-    [self.translateButton setEnabled:NO];
-    [self.translateButton setAlpha:.5];
-    [self.translateButton.titleLabel sizeToFit];
-    
-    [self.recieveMessageButton setAlpha:.5];
+    [self disableButton:self.translateButton];
     
     _backGroundQueue = [[NSOperationQueue alloc] init];
     [_backGroundQueue setMaxConcurrentOperationCount:1];
@@ -99,11 +95,9 @@
     if ([[self.recieveMessageButton titleLabel].text isEqualToString:@"Recieve Message"]) {
         // Only recieve message if text field is empty
         if ([self.messageTextField.text isEqualToString:@""]) {
-            [self.translateButton setEnabled:NO];
-            [self.translateButton setAlpha:.5];
+            [self disableButton:self.translateButton];
             
             [self.recieveMessageButton.titleLabel setText:@"Cancel Recieve"];
-            [self.recieveMessageButton setAlpha:1];
             
             self.flashReciever = [[CFMagicEvents alloc] init];
             [self.flashReciever startCapture];
@@ -119,8 +113,7 @@
     
     // Only send a message if the text field is not empty
     if (![self.messageTextField.text isEqualToString:@""]) {
-        [self.recieveMessageButton setEnabled:NO];
-        [self.recieveMessageButton setAlpha:.5];
+        [self disableButton:self.recieveMessageButton];
         
         NSString *messageToTranslate = self.messageTextField.text;
         
@@ -139,16 +132,16 @@
         }
     } else {
         [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
-        [self.translateButton setAlpha:.5];
-        [self.translateButton setEnabled:NO];
+        [self disableButton:self.translateButton];
+        [self enableButton:self.recieveMessageButton];
+        
         self.letterLabel.text = @"";
         self.symbolLabel.text = @"";
+        
         [self.progressBar setProgress:0 animated:YES];
         [self.progressBar setHidden:YES];
-        _sendProgress = 0;
         
-        [self.recieveMessageButton setAlpha:1];
-        [self.recieveMessageButton setEnabled:YES];
+        _sendProgress = 0;
     }
 }
 
@@ -179,16 +172,15 @@
 - (void)flashingLastSymbol
 {
     [self.translateButton setTitle:@"Send Message" forState:UIControlStateNormal];
-    [self.translateButton setEnabled:NO];
-    [self.translateButton setAlpha:.5];
-    self.letterLabel.text = @"";
-    self.symbolLabel.text = @"";
-    _sendProgress = 0;
+    [self disableButton:self.translateButton];
+    [self enableButton:self.recieveMessageButton];
+    
     [self.progressBar setProgress:0 animated:YES];
     [self.progressBar setHidden:YES];
     
-    [self.recieveMessageButton setAlpha:1];
-    [self.recieveMessageButton setEnabled:YES];
+    self.letterLabel.text = @"";
+    self.symbolLabel.text = @"";
+    _sendProgress = 0;
 }
 
 #pragma mark - UITextFieldDelegate Methods
@@ -204,11 +196,10 @@
 - (void)textFieldChanged:(NSNotification *)note
 {
     if (![self.messageTextField.text isEqualToString:@""]) {
-        [self.translateButton setAlpha:1.0];
-        [self.translateButton setEnabled:YES];
+        [self enableButton:self.translateButton];
     } else {
-        [self.translateButton setAlpha:.6];
-        [self.translateButton setEnabled:NO];
+        [self disableButton:self.translateButton];
+        [self disableButton:self.recieveMessageButton];
     }
 }
 
@@ -239,6 +230,15 @@
     flashOffCount++;
 }
 
+- (void)enableButton:(UIButton *)button
+{
+    [button setAlpha:1];
+    [button setEnabled:YES];
+}
 
-
+- (void)disableButton:(UIButton *)button
+{
+    [button setAlpha:.5];
+    [button setEnabled:NO];
+}
 @end
