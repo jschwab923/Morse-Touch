@@ -9,16 +9,22 @@
 #import "NAYViewController.h"
 #import "NSString+MorseCode.h"
 #import "NAYTorchFlasher.h"
+#import <M13ProgressSuite/M13ProgressViewBar.h>
+
 
 @import AVFoundation;
 
 @interface NAYViewController () <NAYTorchFlasherDelegate>
 {
     NSOperationQueue *_backGroundQueue;
+    CGFloat _sendProgress;
+    CGFloat _totalMessageLength;
 }
 @end
 
 @interface NAYViewController ()
+
+@property (nonatomic) M13ProgressViewBar *progressBar;
 
 @property (weak, nonatomic) IBOutlet UIButton *translateButton;
 @property (weak, nonatomic) IBOutlet UITextField *messageTextField;
@@ -40,14 +46,29 @@
     
     _backGroundQueue = [[NSOperationQueue alloc] init];
     [_backGroundQueue setMaxConcurrentOperationCount:1];
+    
     self.flasher = [[NAYTorchFlasher alloc] init];
     self.flasher.delegate = self;
+
+// TODO: TESTING PROGRESS BAR
+    self.progressBar = [[M13ProgressViewBar alloc] initWithFrame:CGRectMake(0, 0, 250, 50)];
+    self.progressBar.center = CGPointMake(CGRectGetMidX(self.view.frame), CGRectGetHeight(self.view.frame)-50);
+    [self.progressBar setHidden:YES];
+    [self.progressBar setProgressBarThickness:6];
+    [self.progressBar setPercentagePosition:M13ProgressViewBarPercentagePositionBottom];
+    [self.view addSubview:self.progressBar];
+    
     
     // Set up observer for activating and deactiviating button with text field
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(textFieldChanged:)
                                                  name:UITextFieldTextDidChangeNotification
                                                object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,6 +86,7 @@
         NSArray *morseSymbols;
         if (messageToTranslate) {
             morseSymbols = [NSString arrayOfMorseSymbolsFromString:messageToTranslate];
+            _totalMessageLength = [morseSymbols count];
         }
         if (morseSymbols) {
             self.messageTextField.text = @"";
@@ -80,15 +102,21 @@
         [self.translateButton setEnabled:NO];
         self.letterLabel.text = @"";
         self.symbolLabel.text = @"";
+        [self.progressBar setProgress:0 animated:YES];
+        [self.progressBar setHidden:YES];
+        _sendProgress = 0;
     }
 }
 
 - (void)startFlashesWithSymbols:(NSArray *)symbols
 {
+    // Display progress HUD to show how much time left for message sending.
+    [self.progressBar setHidden:NO];
+    
     __block NAYViewController *weakSelf = self;
     for (NSString *currentString in symbols) {
         [_backGroundQueue addOperationWithBlock:^{
-            [weakSelf.flasher flashMorseSymbol:currentString withViewController:weakSelf];
+            [weakSelf.flasher flashMorseSymbol:currentString];
         }];
     }
 }
@@ -96,12 +124,12 @@
 #pragma mark NAYTorchFlasherDelegate Methods
 - (void)flashingSymbol:(NSString *)symbol
 {
-    
+    _sendProgress += 1;
+    [self.progressBar setProgress:_sendProgress/_totalMessageLength animated:YES];
     NSDictionary *morseSymbolsDictionary = [NSString dictionaryOfMorseSymbols];
     NSString *currentLetter = [[morseSymbolsDictionary allKeysForObject:symbol] firstObject];
     [self.letterLabel setText:currentLetter];
     [self.symbolLabel setText:symbol];
-    
 }
 
 - (void)flashingLastSymbol
@@ -110,6 +138,9 @@
     [self.translateButton setEnabled:NO];
     self.letterLabel.text = @"";
     self.symbolLabel.text = @"";
+    _sendProgress = 0;
+    [self.progressBar setProgress:0 animated:YES];
+    [self.progressBar setHidden:YES];
 }
 
 #pragma mark - UITextFieldDelegate Methods

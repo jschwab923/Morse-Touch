@@ -27,7 +27,7 @@
     return self;
 }
 
-- (void)flashMorseSymbol:(NSString *)symbol withViewController:(NAYViewController *)viewController
+- (void)flashMorseSymbol:(NSString *)symbol 
 {
     if (self.cameraDevice) {
         [self.cameraDevice lockForConfiguration:nil];
@@ -35,6 +35,7 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self.delegate flashingSymbol:symbol];
         }];
+        
         
         for (int i = 0; i < symbol.length; i++) {
             [self.cameraDevice setTorchMode:AVCaptureTorchModeOn];
