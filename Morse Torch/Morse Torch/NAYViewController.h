@@ -10,4 +10,7 @@
 
 @interface NAYViewController : UIViewController <UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *symbolLabel;
+@property (weak, nonatomic) IBOutlet UILabel *letterLabel;
+
 @end

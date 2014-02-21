@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B1460BF188F3973004EA88E /* Sidearrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6B1460BE188F3973004EA88E /* Sidearrow.jpg */; };
+		6B647A8A188DF07A00DFDC48 /* NAYTorchFlasher.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B647A89188DF07A00DFDC48 /* NAYTorchFlasher.m */; };
 		6BE01E7B188DC747005C7240 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE01E7A188DC747005C7240 /* Foundation.framework */; };
 		6BE01E7D188DC747005C7240 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE01E7C188DC747005C7240 /* CoreGraphics.framework */; };
 		6BE01E7F188DC747005C7240 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE01E7E188DC747005C7240 /* UIKit.framework */; };
@@ -36,6 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6B1460BE188F3973004EA88E /* Sidearrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sidearrow.jpg; sourceTree = "<group>"; };
+		6B3F5A15188DF17700E05CF6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		6B3F5A17188DF84900E05CF6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		6B647A88188DF07A00DFDC48 /* NAYTorchFlasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAYTorchFlasher.h; sourceTree = "<group>"; };
+		6B647A89188DF07A00DFDC48 /* NAYTorchFlasher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAYTorchFlasher.m; sourceTree = "<group>"; };
 		6BE01E77188DC747005C7240 /* Morse Torch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Morse Torch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BE01E7A188DC747005C7240 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6BE01E7C188DC747005C7240 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -106,6 +113,7 @@
 		6BE01E79188DC747005C7240 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6B3F5A15188DF17700E05CF6 /* AVFoundation.framework */,
 				6BE01E7A188DC747005C7240 /* Foundation.framework */,
 				6BE01E7C188DC747005C7240 /* CoreGraphics.framework */,
 				6BE01E7E188DC747005C7240 /* UIKit.framework */,
@@ -122,6 +130,8 @@
 				6BE01E8C188DC747005C7240 /* Main.storyboard */,
 				6BE01E8F188DC747005C7240 /* NAYViewController.h */,
 				6BE01E90188DC747005C7240 /* NAYViewController.m */,
+				6B647A88188DF07A00DFDC48 /* NAYTorchFlasher.h */,
+				6B647A89188DF07A00DFDC48 /* NAYTorchFlasher.m */,
 				6BE01EB4188DC927005C7240 /* Categories */,
 				6BE01E92188DC747005C7240 /* Images.xcassets */,
 				6BE01E81188DC747005C7240 /* Supporting Files */,
@@ -132,6 +142,8 @@
 		6BE01E81188DC747005C7240 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6B1460BE188F3973004EA88E /* Sidearrow.jpg */,
+				6B3F5A17188DF84900E05CF6 /* Constants.h */,
 				6BE01EAF188DC787005C7240 /* arrow_up_unselected.png */,
 				6BE01E82188DC747005C7240 /* Morse Torch-Info.plist */,
 				6BE01E83188DC747005C7240 /* InfoPlist.strings */,
@@ -245,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1460BF188F3973004EA88E /* Sidearrow.jpg in Resources */,
 				6BE01EB0188DC787005C7240 /* arrow_up_unselected.png in Resources */,
 				6BE01E93188DC747005C7240 /* Images.xcassets in Resources */,
 				6BE01E85188DC747005C7240 /* InfoPlist.strings in Resources */,
@@ -267,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B647A8A188DF07A00DFDC48 /* NAYTorchFlasher.m in Sources */,
 				6BE01E87188DC747005C7240 /* main.m in Sources */,
 				6BE01E91188DC747005C7240 /* NAYViewController.m in Sources */,
 				6BE01E8B188DC747005C7240 /* NAYAppDelegate.m in Sources */,
@@ -479,6 +493,7 @@
 				6BE01EAB188DC747005C7240 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6BE01EAC188DC747005C7240 /* Build configuration list for PBXNativeTarget "Morse TorchTests" */ = {
 			isa = XCConfigurationList;
@@ -487,6 +502,7 @@
 				6BE01EAE188DC747005C7240 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
